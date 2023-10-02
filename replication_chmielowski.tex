@@ -196,7 +196,7 @@ Colonies & 70 & 42 & 39 & 37 & 10 & 71 & 70\\
 
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:26 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:46 PM
 \begin{table}[!htbp] \centering 
   \caption{Regressions of governor salaries on the connectedness to the secretary of state} 
   \label{tab:sal} 
@@ -242,7 +242,7 @@ Observations & 3,510 & 3,510 & 3,510 & 3,510 & 3,510 & 3,510 & 4,290 \\
 \hspace*{5mm} Columns (1) and (2) of Table~\ref{tab:tran}, which replicates the results from Table 3 in the paper, imply that transfers to higher paying colonies were the main driver of the previously observed salary premia of connectedness: The introduction of colony FE decreases the coefficient of connectedness and makes it insignificant, which might indicate that the difference in salary induced by connectedness is mediated via colony characteristics. Column (3) shows the effect of connectedness on the log initial revenue, which, according to the author, is an indicator of the colony size. However, in the provided Stata code, the calculation of this log initial revenue is conducted by first grouping observations by colony ID and them calculating the minimum log revenue for each colony. I do not find this calculation to be correct and therefore repeat this estimation in column (6) with the actual initial log revenue of every colony when a governor started his mandate there\footnote{If revenue is a measure of colony size and larger size means higher salary, I argue that if a secretary of state decided to treat a particular governor preferentially, he whould appoint him to a colony on basis of the revenue \textit{in that particular year} when the decision was made.}. The effect of connectedness is significant and virtually the same as in column (3). Columns (4) and (5) show the effect of connectedness on whether the area is in the tropics and on the log distance of the colony to London, respectively, and both are insignificant. Column (7) shows the same regression as (6), but again with all observations (not only the "full" sample).
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:26 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:46 PM
 \begin{table}[!htbp] \centering 
   \caption{Transfers and connectedness to the Secretary of State} 
   \label{tab:tran} 
@@ -292,7 +292,7 @@ connected \arrow[rr,"c"] && salary
 
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:26 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:47 PM
 \begin{table}[!htbp] \centering 
   \caption{Mediation analysis of salary on connectedness via colony size.} 
   \label{tab:mediation1} 
@@ -348,7 +348,7 @@ Prop. Mediated & 0.437 & 0.114 & 0.235 & 0.680\\
 \hspace*{5mm} Table~\ref{tab:abol} shows how the effect of being connected to the secretary of state on salary changed after the abolishment of patronage in 1930. The combined effects of $Connected + Reform*Connected$ (the sum of row 2 and 3 in Table~\ref{tab:abol}) are shown in Table~\ref{tab:combo}. Both tables refer to Table 4 in the paper and reproduce the results. In column (7), I added an additional regression which includes all controls (linear time trend in social connections, interactions of governor/characteristics and connections) at once as additional robustness check. That is, I control for time changes in the importance of connections, changes in the pool of governors, and changes in the pool of colonies colonies all at once. As in the other columns, the salary gap becomes zero after 1930, but before that, the connectedness premium is remarkably bigger than before (but also with a bigger standard error). 
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:26 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:47 PM
 \begin{table}[!htbp] \centering 
   \caption{The effects of the abolishment of patronage in 1930} 
   \label{tab:abol} 
@@ -416,7 +416,7 @@ SE & 0.041 & 0.044 & 0.041 & 0.068 & 0.039 & 0.210\\
 \hspace*{5mm} In Table~\ref{tab:rev}, we see the replication of panel A of Table 5 in the paper (the effect of connectedness on colony revenues), and in Table~\ref{tab:exp} the replication of panel B (the effect of connectedness on colony expenditure). Both revenues and expenditures serve as measures of governors' job performance. For Table~\ref{tab:rev}, the sum of the coefficients of the connected dummy and the interaction between being connected and being after 1930 (column 2) is 0.006 with a standard error of 0.027. The respective sum and standard error for Table~\ref{tab:exp} are 0.011 and 0.025. We therefore see that after the Warren-Fisher reform, both the differentials in revenue and expenditures vanish. I reproduce column (2) in both tables will the complete dataset in column (5), respectively and find no qualitative difference. The combined effects $Connected + Reform*Connected$ are -0.012 (0.028) for revenues and -0.003 (0.028) for expenditures. Therefore, also with all data included, the performance gap closes with the reform.
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:27 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:47 PM
 \begin{table}[!htbp] \centering 
   \caption{The effects of connectedness on colony revenue and its components} 
   \label{tab:rev} 
@@ -451,7 +451,7 @@ Observations & 3,510 & 3,510 & 2,708 & 2,698 & 3,885 \\
 \end{table} 
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:27 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:47 PM
 \begin{table}[!htbp] \centering 
   \caption{The effects of connectedness on colony expenditures and their components} 
   \label{tab:exp} 
@@ -497,7 +497,7 @@ Observations & 3,510 & 3,510 & 1,754 & 2,606 & 3,826 \\
 \hspace*{5mm} Tables~\ref{tab:ord} and \ref{tab:combo_ord} show the replication of Table 6 in the paper, which studies tax exemptions and ordinances in response to connectedness. As governors had far-reaching discretion in tax matters of the colony and tax avoidance denoted a means of personal enrichment (of themselves or other members of the settler elite), their tax policy denotes a particularly fitting area to study when it comes to connectedness under patronage. We see indeed significantly more ordinances for connected governors in total (column 1), which appears to be significantly driven by more exemptions (4) and ordinances on tariff (3), both policies to disproportionally affect the settler elite. This gap between connected and unconnected governors then disappears after 1930, and no gap can be found for other taxes (2), social programs (5) and public works (6).
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:27 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:48 PM
 \begin{table}[!htbp] \centering 
   \caption{Tax ordinances, exemptions and connectedness to the Secretary of State} 
   \label{tab:ord} 
@@ -549,7 +549,7 @@ SE & 0.006 & 0.005 & 0.004 & 0.128 & 0.005 & 0.003\\
 \hspace*{5mm} Lastly, Tables~\ref{tab:alt} and \ref{tab:combo_alt} reproduce Table 7 from the paper on alternative performance measures and connectedness, namely mentions of social unrest in the colony in British newspapers (1), mentions of certain governors in text-mined parliament speeches (2) and sentiments in these speeches (3), and receipt of public awards (4). All included measures except (2) imply that connected governors performed worse during the time of patronage. I augment these tables again by the inclusion of all observations for social unrest (5) and sentiment (6). Social unrest now turns insignificant (i.e. no difference between connected and unconnected even before abolishment), while sentiment stays significant at a 10\% level.
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Wed, Sep 27, 2023 - 2:58:27 PM
+% Date and time: Mon, Oct 02, 2023 - 9:50:48 PM
 \begin{table}[!htbp] \centering 
   \caption{Alternative performance measures and connectedness to the Secretary of State} 
   \label{tab:alt} 
