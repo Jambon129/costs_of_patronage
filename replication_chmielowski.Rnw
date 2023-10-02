@@ -1,0 +1,394 @@
+\documentclass[a4paper]{article}
+\usepackage{fullpage}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tikz-cd}
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue,
+    citecolor = blue,
+    urlcolor  = blue
+    }
+
+\urlstyle{same}
+\usepackage{graphicx}
+\graphicspath{{./figures//}}
+
+\usepackage{listings}
+\lstset{
+basicstyle=\small\ttfamily,
+columns=flexible,
+breaklines=true
+}
+\usepackage{fancyvrb,newverbs,xcolor}
+\definecolor{cverbbg}{gray}{0.93}
+
+\setlength\parindent{24pt}
+
+\usepackage[bibstyle=authoryear,
+citestyle=authoryear-ibid, backend=bibtex]{biblatex}
+\addbibresource{mybib.bib}
+
+\title{The Costs of Patronage:\\ Evidence from the British Empire\thanks{Original paper by Guo, Xu, published in American Economic Review 2018, 108(11), p. 3170 - 3198} \\ \vskip 0.4cm \normalsize Replication Analyis by Andreas Chmielowski for Econometrics III}
+
+\date{\vspace{-5ex}}
+\setlength{\parindent}{0em} 
+
+\begin{document}
+%\SweaveOpts{concordance=TRUE}
+
+
+\maketitle
+
+\section{Introduction}
+\hspace*{5mm} In the underlying paper, the author investigates how personal connections between bureaucrats and their superiors impact job appointment and performance under patronage, i.e. in a system where job appointment is completely at the discretion of the superior. The particular focus is on the appointment of colonial governors in the British Empire by the secretary of state. Did governors who had some \textit{predetermined} connection to the secretary of state (because they were relatives, they went to the same university, or they where both members of the aristocracy) treated preferentially (i.e. appointed to higher-paying colonies)? And did connected governors perform better (e.g. due to loyalty to their superior) or worse (e.g. due to lack of incentive)? The answers to these questions can inform how to organize appointment to public office best -- also nowadays -- and assess whether patronage in particular is an efficient way of doing it \parencite{guoxu2018}.
+
+\hspace*{5mm} For the analysis, the author uses a dataset extracted from digitized historical personnel and public finance reports of the British Colonial Office from 1854 until 1966. These data capture both the variation in connectedness between a governor and a Secretary of State within a governor's term (ministerial changes in London) and variation in the extent of discretion of the Secretary due to a reform of the appointment mechanism of colonial governors in 1930 (the \textit{Warren-Fisher Reform}, which basically removed patronage). Data on connectedness between governors and Secretaries stems from genealogical and biographical sources and data on Governors' job performance comes from records of public revenues and expenditures of the colonies. The check for the robustness of the results, alternative performance measures are used: Social unrest in the colony, mentions and sentiments regarding particular governors in parliamentary debates, and the likelihood to receive a public award \parencite[p.3171 ff.]{guoxu2018}. 
+
+\hspace*{5mm} The author's complete data and Stata code is readily available online and was used for this replication. Most variables are used from the dataset as they come, but others I had to derive first (e.g. certain grouped indices, means per quinnenial etc.) That is, there was not much data cleaning necessary because the published data were already in a pretty good shape. I recoded the whole analysis in \texttt{R}, because this is my primary language, and commented on all steps in the \texttt{R} script (attached in the submission). I also added some additional steps where I found them meaningful. In what follows I present my replication of the tables and comment on changes, where they occur. 
+
+\section{Descriptive Statistics}
+<<setup, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, size="small">>=
+
+# adjust width of output in document and output of tables
+options(width = 115)
+options(knitr.table.format = "latex")
+
+# set wd (change if necessary)
+setwd("C:/Users/xchmia/Documents/courses/1st_year/econometrics_3/replication/guo2018/R")
+
+# packages (install if necessary)
+library("kableExtra")
+library("stargazer")
+library("tidyr")
+library("ggplot2")
+library("gridExtra")
+
+# gathering all objects to display
+load("./results/t1.RData")
+load("./results/sal_reg.RData")
+load("./results/tran_reg.RData")
+load("./results/abol_reg.RData")
+load("./results/med_reg.RData")
+load("./results/perf_reg.RData")
+load("./results/ord_reg.RData")
+load("./results/alt_reg.RData")
+load("./results/plot1.RData")
+load("./results/plot2.RData")
+load("./results/plot3.RData")
+
+@
+\hspace*{5mm} Tables~\ref{tab:descriptives1}~and~\ref{tab:descriptives2} reproduce panels A and B from Table 1 of \cite{guoxu2018} and show descriptive statistics on governors and officers. The pooled means for governors were obtained by first calculating the mean for each governor over the years of their mandate and then getting the mean over all governor means. For the particular years, only a single mean is necessary. The calculated statisticis are indeed the same as in the paper, except for some rounding errors. Interestingly, the dataset comes with 4,687 observations, but every time when the author refers to a statistic from the "full" dataset, he only uses 3,510 observations (filtered with a dummy variable called "full" in the data set). He does not explain what this is about, but I assume it has something to do with whether comprehensive information of a governors connectedness to the then-incumbent Secretary of State was available. All statistics in Tables~\ref{tab:descriptives1}~and~\ref{tab:descriptives2} only use these 3,510 observations. To each table, I add another column with the means of the pooled data with all 4,687 observations and find no large differences to the "full" sample.   
+<<descriptives, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+# display tables in Latex
+kbl(t1_A, 
+    booktabs = T, 
+    linesep = "",
+    caption = "Descriptive characteristics of governors",
+    label = "descriptives1") |> 
+  kable_styling(position = "center") |>
+  kable_styling(latex_options = "hold_position") |>
+  add_header_above(c(" "= 1, "Pooled years" = 2, "By year" = 4, "unfiltered" = 1)) |>
+  kable_styling(font_size = 7)
+
+kbl(t1_B, 
+    booktabs = T, 
+    linesep = "",
+    caption = "Descriptive characteristics of British colonies",
+    label = "descriptives2") |> 
+  kable_styling(position = "center") |>
+  kable_styling(latex_options = "hold_position") |>
+  add_header_above(c(" "= 1, "Pooled years" = 2, "By year" = 4, "unfiltered" = 1)) |>
+  kable_styling(font_size = 7)
+
+@
+\hspace*{5mm} In Figures~\ref{fig:plot1}~and~\ref{fig:plot2}, I reproduce Figures 2 and 3 from the paper. Here, the author uses all observations (not only the "full" subset), which are replicated in the upper plots (blue). The red plots utilize only the full set (i.e. the "full" dummy equals 1). No qualitative differences can be observed. Especially Figure~\ref{fig:plot2} shows that, for a most of the time, salaries are indeed higher for connected governors. However, at this point nothing can be said about causality yet.    
+<<plot1, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis', fig.width= 5, fig.height=2, fig.align= "center", fig.cap="Share of governors connected to the secretary of state", fig.show='hold'>>=
+
+par(mar = c(4, 4, .1, .1))
+plot1
+plot1_all
+
+@
+
+<<plot2, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis', fig.width= 5, fig.height=2, fig.align= "center", fig.cap="Average salary connected versus unconnected over time", fig.show='hold'>>=
+
+plot2
+plot2_all
+
+@
+
+\section{Results}
+\subsection{Salary premium of social connections}
+\hspace*{5mm} Table~\ref{tab:sal} shows the effect of all measures of predetermined connectedness considered in the paper on the governor salary, mirroring Table 2 from the paper. As governor FE, year FE and spell length FE are included in the regressions, it seems plausible that the source of variation left which is captured by connection is the variation on the side of the secretary of state -- personnel changes in the government in London. Especially the governor FE absorb variation from the possibility that time-invariant higher-skilled governors might earn higher salaries and be better connected, and the identification is therefore driven by connection changes of governors during their career. As before with the descriptive statistics, I included now all observations in column (7) (some of which have been nonetheless excluded due to missingness of relevant variables). The positive salary premium remains significant and stable also in this version of the sample.
+
+<<salary, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+stargazer::stargazer(sal1, sal2, sal3, sal4, sal5, sal6, sal7,
+                     add.lines = list(c("Mean of dep. var", mean_sal, mean_sal, 
+                                        mean_sal, mean_sal, mean_sal, mean_sal, mean_salall),
+                                      c("Year FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Governor FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")),
+                     omit.stat = c("LL","ser", "f", "adj.rsq", "rsq"),
+                     dep.var.caption = "",
+                     font.size = "scriptsize",
+                     covariate.labels=c("No. colonies served","Shared ancestors", "Both aristocrats", "Both Eton", "Both Oxbridge", "Connected"),
+                     dep.var.labels = "log governor salary",
+                     title = "Regressions of governor salaries on the connectedness to the secretary of state",
+                     label = "tab:sal")
+
+@
+
+\subsection{Transfers and connectedness}
+\hspace*{5mm} Columns (1) and (2) of Table~\ref{tab:tran}, which replicates the results from Table 3 in the paper, imply that transfers to higher paying colonies were the main driver of the previously observed salary premia of connectedness: The introduction of colony FE decreases the coefficient of connectedness and makes it insignificant, which might indicate that the difference in salary induced by connectedness is mediated via colony characteristics. Column (3) shows the effect of connectedness on the log initial revenue, which, according to the author, is an indicator of the colony size. However, in the provided Stata code, the calculation of this log initial revenue is conducted by first grouping observations by colony ID and them calculating the minimum log revenue for each colony. I do not find this calculation to be correct and therefore repeat this estimation in column (6) with the actual initial log revenue of every colony when a governor started his mandate there\footnote{If revenue is a measure of colony size and larger size means higher salary, I argue that if a secretary of state decided to treat a particular governor preferentially, he whould appoint him to a colony on basis of the revenue \textit{in that particular year} when the decision was made.}. The effect of connectedness is significant and virtually the same as in column (3). Columns (4) and (5) show the effect of connectedness on whether the area is in the tropics and on the log distance of the colony to London, respectively, and both are insignificant. Column (7) shows the same regression as (6), but again with all observations (not only the "full" sample).
+<<transfer, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+stargazer::stargazer(tran1, tran2, tran3, tran4, tran5, tran6, tran7,
+                     add.lines = list(c("Mean of dep. var", mean_sal, mean_sal, 
+                                        mean_rev, mean_trop, mean_london, mean_initial_rev, mean_initial_rev_all),
+                                      c("Year FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Governor FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Colony FE", "-", "Yes", "-", "-", "-", "-", "-"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")),
+                     omit.stat = c("LL","ser", "f", "adj.rsq", "rsq"),
+                     covariate.labels=c("No. colonies served", "Connected"),
+                     column.separate = c(2, 3, 2),
+                     dep.var.caption = "",
+                     dep.var.labels.include = F,
+                     font.size = "scriptsize",
+                     column.labels = c("log governor salary", "Colony Fixed effects", "actual initial rev"),
+                     column.sep.width = "5pt",
+                     title = "Transfers and connectedness to the Secretary of State",
+                     notes.append = FALSE,
+                     label = "tab:tran")
+
+@
+\hspace*{5mm} Given that transfers to high-salary colonies are the primary way for secretaries to treat connected governors preferentially, we see in columns (3) and (6) of Table~\ref{tab:tran} that connectedness is significantly associated with larger colonies. I decided to augment this argument by conducting a proper mediation analysis as shown in Figure~\ref{triangle}. That is, I assess whether channel \textit{c} is actually fully or only partly mediated by the colony size. I do not consider the other two colony characteristics, area on tropics and log distance to London, as their association with connectedness is insignificant. The results of the mediation analysis can be found in Tables~\ref{tab:mediation1} and \ref{tab:mediation2}. For the log initial revenue, I included my own calculated measure (because I think it is the right one) and I included the same FE and controls as in Table~\ref{tab:tran}. The mediation analysis shows that only 44\% of the the salary premium due to connectedness is mediated by colony size, which means that other colony characteristics apart from the colony size -- expressed as initial revenue at a governor's mandate -- might correspond to higher salaries, too. Things that come into my mind are measures of how "hard" colony is to govern, such as size in square kilometers or state of street/railway infrastructure: Colonies that are more prone to violent uprisings or strikes might mean higher salaries to the governors who have their mandate there (as a "risk premium", for example). A definitive answer, however, requires more data on colony characteristics.    
+
+\begin{figure}[H]
+\[
+\begin{tikzcd}
+ & colony size \arrow[dr,"b"] \\
+connectedness \arrow[ur,"a"] \arrow[rr,"c'"] && salary
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}[row sep=2.5em]
+connected \arrow[rr,"c"] && salary
+\end{tikzcd}
+\]
+\caption{The assumed total (c) direct (c') an indirect (a,b) effects of \textit{connectedness} on \textit{salary}}
+\label{triangle}
+\end{figure}
+
+<<mediation, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+stargazer::stargazer(med1, med2, med3,
+                     add.lines = list(c("Year FE", "Yes", "Yes", "Yes"),
+                                      c("Governor FE", "Yes", "Yes", "Yes"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes")),
+                     omit.stat = c("LL","ser", "f"),
+                     covariate.labels=c("No. colonies served", "Connected", "log initial revenue"),
+                     dep.var.caption = "",
+                     dep.var.labels.include = F,
+                     font.size = "scriptsize",
+                     column.labels = c("log governor salary", "log initial revenue", "log governor salary"),
+                     column.sep.width = "5pt",
+                     title = "Mediation analysis of salary on connectedness via colony size.",
+                     notes.append = FALSE,
+                     label = "tab:mediation1")
+
+kbl(summed,
+    booktabs = T,
+    label = "mediation2",
+    caption = "Mediation analysis output") |>
+  kable_styling(position = "center") |>
+  kable_styling(latex_options = "hold_position") |>
+  kable_styling(font_size = 7)
+
+@
+
+
+\subsection{The abolishment of patronage}
+\hspace*{5mm} Table~\ref{tab:abol} shows how the effect of being connected to the secretary of state on salary changed after the abolishment of patronage in 1930. The combined effects of $Connected + Reform*Connected$ (the sum of row 2 and 3 in Table~\ref{tab:abol}) are shown in Table~\ref{tab:combo}. Both tables refer to Table 4 in the paper and reproduce the results. In column (7), I added an additional regression which includes all controls (linear time trend in social connections, interactions of governor/characteristics and connections) at once as additional robustness check. That is, I control for time changes in the importance of connections, changes in the pool of governors, and changes in the pool of colonies colonies all at once. As in the other columns, the salary gap becomes zero after 1930, but before that, the connectedness premium is remarkably bigger than before (but also with a bigger standard error). 
+<<abolishment, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+stargazer::stargazer(abol1, abol2, abol3, abol4, abol5, abol6, abol7,
+                     add.lines = list(c("Mean of dep. var", mean_sal, mean_sal, 
+                                        mean_sal, mean_sal, mean_sal, mean_sal_prepost, mean_sal),
+                                      c("Year FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Governor FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Connected x trend", "-", "-", "Yes", "-", "-", "-", "Yes"),
+                                      c("Connected x gov. char.", "-", "-", "-", "Yes", "-", "-", "Yes"),
+                                      c("Connected x col. char.", "-", "-", "-", "-", "Yes", "-", "Yes")),
+                     omit.stat = c("LL","ser", "f", "adj.rsq", "rsq"),
+                     keep = c(1:3),
+                     covariate.labels = c("No. colonies served", "Connected", "Reform x Connected"),
+                     column.separate = c(5, 1, 1),
+                     dep.var.caption = "log governor salary",
+                     dep.var.labels.include = F,
+                     font.size = "scriptsize",
+                     column.labels = c("Full sample", "Pre-Post", "All controls"),
+                     title = "The effects of the abolishment of patronage in 1930",
+                     notes.append = FALSE,
+                     label = "tab:abol")
+
+# creating table of combined effects
+eff <- c(com2, com3, com4, com5, com6, com7)
+se <- c(com2_se, com3_se, com4_se, com5_se, com6_se, com7_se)
+combined <- as.data.frame(rbind(eff, se))
+row.names(combined) <- c("Estimate", "SE")
+colnames(combined) <- c("(2)", "(3)", "(4)", "(5)", "(6)", "(7)")
+
+kbl(round(combined, 3), 
+    booktabs = T, 
+    linesep = "",
+    caption = "Being connected after 1930, log governor salary",
+    label = "combo") |> 
+  kable_styling(position = "center") |>
+  kable_styling(latex_options = "hold_position") |>
+  kable_styling(font_size = 7)
+
+@
+\hspace*{5mm} Figure~\ref{fig:plot3} reproduces Figure 4 from the paper, but with a longer pre-treatment time included (red shaded area). In the paper, the author states that the estimates in the figure come from an augmented version of column (2) in Table~\ref{tab:abol} and argues that \textit{"[t]he focus around a narrow window ensures that the environment such as the number of colonies remains roughly constant over time"}\parencite[p.3186]{guoxu2018}. Indeed, in the red shaded area we see that the salary gap between connected and unconnected governors is pretty volatile, which either means that the author is right and the composition and number of colonies has changed, or it could be an indication that parallel trends are not plausible. Indeed, the author himself states that \textit{"[w]hile it is ultimately not possible to rule out all potential confounders in this historical setting, the combined robustness checks at least suggest that the observed lack of heterogeneity after 1930 is consistent with the reform impacts."}\parencite[p.3187]{guoxu2018}. This becomes even more apparent by including the years in the red-shaded area: The confidence intervals are systematically larger before and systematically smaller after the reform.
+<<plot3, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis', fig.width= 4, fig.height=2, fig.align= "center", fig.cap="Salary gap and the removal of patronage on basis of the regression of column (2) in Table 4. Red shaded area: Years not shown in the original plot in the paper." >>=
+
+plot3
+
+
+@
+
+\subsection{Performance and connectedness}
+\hspace*{5mm} In Table~\ref{tab:rev}, we see the replication of panel A of Table 5 in the paper (the effect of connectedness on colony revenues), and in Table~\ref{tab:exp} the replication of panel B (the effect of connectedness on colony expenditure). Both revenues and expenditures serve as measures of governors' job performance. For Table~\ref{tab:rev}, the sum of the coefficients of the connected dummy and the interaction between being connected and being after 1930 (column 2) is \Sexpr{round(com_rev,3)} with a standard error of \Sexpr{round(com_rev_se,3)}. The respective sum and standard error for Table~\ref{tab:exp} are \Sexpr{round(com_exp,3)} and \Sexpr{round(com_exp_se,3)}. We therefore see that after the Warren-Fisher reform, both the differentials in revenue and expenditures vanish. I reproduce column (2) in both tables will the complete dataset in column (5), respectively and find no qualitative difference. The combined effects $Connected + Reform*Connected$ are \Sexpr{round(com_revall,3)} (\Sexpr{round(com_revall_se,3)}) for revenues and \Sexpr{round(com_expall,3)} (\Sexpr{round(com_expall_se,3)}) for expenditures. Therefore, also with all data included, the performance gap closes with the reform.
+<<performance, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+stargazer::stargazer(rev1, rev2, rev3, rev4, rev5,
+                     add.lines = list(c("Mean of dep. var", mean_rev_total, mean_rev_total, mean_rev_customs, mean_rev_internal, mean_revall_total),
+                                      c("Year FE", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Governor-Colony FE", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")),
+                     omit.stat = c("LL","ser", "f", "adj.rsq", "rsq"),
+                     keep = c(1:3),
+                     covariate.labels = c("No. colonies served", "Connected", "Reform x Connected"),
+                     column.separate = c(2, 1, 1, 1),
+                     dep.var.caption = "log revenue",
+                     dep.var.labels.include = F,
+                     font.size = "scriptsize",
+                     column.labels = c("Total", "Trade", "Internal", "All"),
+                     title = "The effects of connectedness on colony revenue and its components",
+                     notes.append = FALSE,
+                     label = "tab:rev")
+
+stargazer::stargazer(exp1, exp2, exp3, exp4, exp5,
+                     add.lines = list(c("Mean of dep. var", mean_exp_total, mean_exp_total, mean_exp_tax, mean_exp_pubworks, mean_expall_total),
+                                      c("Year FE", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Governor-Colony FE", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")),
+                     omit.stat = c("LL","ser", "f", "adj.rsq", "rsq"),
+                     keep = c(1:3),
+                     covariate.labels = c("No. colonies served", "Connected", "Reform x Connected"),
+                     column.separate = c(2, 1, 1, 1),
+                     dep.var.caption = "log expenditure",
+                     font.size = "scriptsize",
+                     dep.var.labels.include = F,
+                     column.labels = c("Total", "Tax", "Works", "All"),
+                     title = "The effects of connectedness on colony expenditures and their components",
+                     notes.append = FALSE,
+                     label = "tab:exp")
+
+@
+\hspace*{5mm} I refrain from including a reproduction of Figure 5 into this excercise, because -- unlike Figure~\ref{fig:plot3} -- it represents estimates from a naive staggered DiD estimation as it was standard before \cite{sun2021} and related papers. That is, estimates shown in this figure will only be unbiased if all of the following assumptions hold simultaneously:
+\begin{enumerate}
+  \item parallel trends
+  \item no anticipation
+  \item homogeneous treatment effects
+\end{enumerate}
+\hspace*{5mm} At least the third assumption is very implausible to hold as, while connectedness is a dummy variable in the present dataset, in reality might it vary in degree and nature. Not only might one governor have a stronger bond of friendship with the incumbent secretary of state than another governor -- even if they all went to the same university. In few cases, connectedness might also even yield the opposite effect: Secretaries might be on bad terms with some governors, denying them e.g. a transfer to a higher paying colony that they would have gotten otherwise. \cite{callaway2021} have come forward with an estimator that allows for heterogeneous treatment effects which is even implemented in an \texttt{R} package but not estimable with this particular dataset because the data on different treatment groups (mandates of governors) do not overlap. That is, the long time span from 1854 until 1966 in combination with the rather short mandate timespans per governor does not allow for the interpretation as an unbalanced panel, which is crucial for this estimator. Fortunately, Figure 5 is not a main result of \cite{guoxu2018} but rather a dynamic illustration of what is shown in Table~\ref{tab:rev} and \ref{tab:exp} anyway: Governors reduce expenditure and revenue as they get connected which a secretary of state.    
+
+\subsection{Ordinances and exemptions}
+\hspace*{5mm} Tables~\ref{tab:ord} and \ref{tab:combo_ord} show the replication of Table 6 in the paper, which studies tax exemptions and ordinances in response to connectedness. As governors had far-reaching discretion in tax matters of the colony and tax avoidance denoted a means of personal enrichment (of themselves or other members of the settler elite), their tax policy denotes a particularly fitting area to study when it comes to connectedness under patronage. We see indeed significantly more ordinances for connected governors in total (column 1), which appears to be significantly driven by more exemptions (4) and ordinances on tariff (3), both policies to disproportionally affect the settler elite. This gap between connected and unconnected governors then disappears after 1930, and no gap can be found for other taxes (2), social programs (5) and public works (6).
+<<ordinances, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+stargazer::stargazer(ord1, ord2, ord3, ord4, ord5, ord6,
+                     add.lines = list(c("Mean of dep. var", mean_ord_total, mean_ord_tax, mean_ord_trade, mean_cus_exemp, mean_ord_social, mean_ord_pubworks),
+                                      c("Year FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Governor-Colony FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")),
+                     omit.stat = c("LL","ser", "f", "adj.rsq", "rsq"),
+                     covariate.labels=c("No. colonies served", "Connected", "Reform x Connected"),
+                     dep.var.caption = "",
+                     dep.var.labels.include = F,
+                     font.size = "scriptsize",
+                     column.labels = c("Total", "Direct tax", "Customs", "Exemptions", "Social", "Works"),
+                     title = "Tax ordinances, exemptions and connectedness to the Secretary of State",
+                     notes.append = FALSE,
+                     label = "tab:ord")
+
+# creating table of combined effects
+eff_ord <- c(com_ord1, com_ord2, com_ord3, com_ord4, com_ord5, com_ord6)
+se_ord <- c(com_ord1_se, com_ord2_se, com_ord3_se, com_ord4_se, com_ord5_se, com_ord6_se)
+combined_ord <- as.data.frame(rbind(eff_ord, se_ord))
+row.names(combined_ord) <- c("Estimate", "SE")
+colnames(combined_ord) <- c("(1)", "(2)", "(3)", "(4)", "(5)", "(6)")
+
+kbl(round(combined_ord, 3), 
+    booktabs = T, 
+    linesep = "",
+    caption = "Being connected after 1930, ordinances and exemptions",
+    label = "combo_ord") |> 
+  kable_styling(position = "center") |>
+  kable_styling(latex_options = "hold_position") |>
+  kable_styling(font_size = 7)
+
+@
+
+\subsection{Additional performance measures}
+\hspace*{5mm} Lastly, Tables~\ref{tab:alt} and \ref{tab:combo_alt} reproduce Table 7 from the paper on alternative performance measures and connectedness, namely mentions of social unrest in the colony in British newspapers (1), mentions of certain governors in text-mined parliament speeches (2) and sentiments in these speeches (3), and receipt of public awards (4). All included measures except (2) imply that connected governors performed worse during the time of patronage. I augment these tables again by the inclusion of all observations for social unrest (5) and sentiment (6). Social unrest now turns insignificant (i.e. no difference between connected and unconnected even before abolishment), while sentiment stays significant at a 10\% level.
+<<alternative, eval=TRUE, echo=F, include=TRUE, warning=FALSE, message=FALSE, size="scriptsize", results='asis' >>=
+
+stargazer::stargazer(alt1, alt2, alt3, alt4, alt5, alt6,
+                     add.lines = list(c("Mean of dep. var", mean_alt_unrest, mean_alt_hansard, mean_alt_polarity, mean_alt_award, mean_alt_unrestall, mean_alt_polarityall),
+                                      c("Year FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Governor-Colony FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+                                      c("Spell lengths FE", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")),
+                     omit.stat = c("LL","ser", "f", "adj.rsq", "rsq"),
+                     covariate.labels=c("No. colonies served", "Connected", "Reform x Connected"),
+                     dep.var.caption = "",
+                     dep.var.labels.include = F,
+                     font.size = "scriptsize",
+                     column.labels = c("Unrest", "Mentions", "Sentiment", "Awards", "Unrest (All)", "Sentiment (All)"),
+                     title = "Alternative performance measures and connectedness to the Secretary of State",
+                     notes.append = FALSE,
+                     label = "tab:alt")
+
+# creating table of combined effects
+eff_alt <- c(com_alt1, com_alt2, com_alt3, com_alt4, com_alt5, com_alt6)
+se_alt <- c(com_alt1_se, com_alt2_se, com_alt3_se, com_alt4_se, com_alt5_se, com_alt6_se)
+combined_alt <- as.data.frame(rbind(eff_alt, se_alt))
+row.names(combined_alt) <- c("Estimate", "SE")
+colnames(combined_alt) <- c("(1)", "(2)", "(3)", "(4)", "(5)", "(6)")
+
+kbl(round(combined_alt, 3), 
+    booktabs = T, 
+    linesep = "",
+    caption = "Being connected after 1930, alternative measures",
+    label = "combo_alt") |> 
+  kable_styling(position = "center") |>
+  kable_styling(latex_options = "hold_position") |>
+  kable_styling(font_size = 7)
+
+@
+
+\section{Conclusion}
+\cite{guoxu2018} is a very strong paper that provides very compelling and easily tractable evidence for the argument of patronage being a suboptimal way of organizing public policy. None of my additionally conducted robustness checks was able to weaken the fundamental evidence in this paper. However, it has to be kept in mind that much of my analysis is dependent on the provided dataset, which was composed by the author himself. That is, although the evidence from this paper and excercise is indeed very compelling, I have no insight into the selection of variables made beforehand. 
+
+\section{References}
+\printbibliography[heading=none]
+
+\end{document}
