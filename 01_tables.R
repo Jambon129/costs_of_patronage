@@ -1,7 +1,6 @@
 # script_01 for Replication Excercise of Guo (2018): The Costs of Patronage: Evidence from the British Empire
 # author (of replication): Andreas Chmielowski
 # purpose: Recreation of tables
-# PhD Economics, Gothenburg University
 #--------------------------------------
 
 ### table 1 (panel A): Governor characteristics

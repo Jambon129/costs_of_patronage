@@ -1,7 +1,6 @@
 # script_02 for Replication Excercise of Guo (2018): The Costs of Patronage: Evidence from the British Empire
 # author (of replication): Andreas Chmielowski
 # purpose: Recreate figures
-# PhD Economics, Gothenburg University
 #--------------------------------------
 
 ## Figure 2: share of connected governors

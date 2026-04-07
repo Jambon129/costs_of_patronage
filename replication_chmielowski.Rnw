@@ -32,7 +32,7 @@ breaklines=true
 citestyle=authoryear-ibid, backend=bibtex]{biblatex}
 \addbibresource{mybib.bib}
 
-\title{The Costs of Patronage:\\ Evidence from the British Empire\thanks{Original paper by Guo, Xu, published in American Economic Review 2018, 108(11), p. 3170 - 3198} \\ \vskip 0.4cm \normalsize Replication Analyis by Andreas Chmielowski for Econometrics III}
+\title{The Costs of Patronage:\\ Evidence from the British Empire\thanks{Original paper by Guo, Xu, published in American Economic Review 2018, 108(11), p. 3170 - 3198} \\ \vskip 0.4cm \normalsize Replication Analyis by Andreas Chmielowski}
 
 \date{\vspace{-5ex}}
 \setlength{\parindent}{0em} 

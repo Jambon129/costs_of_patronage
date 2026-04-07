@@ -1,8 +1,6 @@
 # master script for Replication Excercise of Guo (2018): The Costs of Patronage: 
 # Evidence from the British Empire
 # author (of replication): Andreas Chmielowski
-# purpose: Replication Excercise for Econometrics III, 
-# PhD Economics, Gothenburg University
 #--------------------------------------
 
 # set working directory (commented out because everything remains in that folder)
@@ -17,8 +15,7 @@ packages = c("tidyverse",    # data manipulation
              "Hmisc",        # create leads an lags
              "did",          # Callaway and Sant'Anna's estimator
              "mediation",    # for the mediation analysis
-             "tinytex"      # for compiling
-             #,"tools"
+             "tinytex"       # for compiling to pdf
              )  
 
 #tinytex::install_tinytex(bundle = "TinyTeX")
