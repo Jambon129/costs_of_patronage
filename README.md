@@ -7,7 +7,7 @@ Run `00_master.R` to reproduce everything from scratch (tables, figures, the fin
 ## Project structure
 - `analysis.dta` - the data set in STATA format provided by the author
 - `01_tables.R` - produces descriptive and regression tables, saves them in the results folder
-- `02_figures` - produces plots, saves them in the figures folder
+- `02_figures.R` - produces plots, saves them in the figures folder
 - `replication_chmielowski.Rnw` compiles a final report, sources from the results and figures folder
 
 
