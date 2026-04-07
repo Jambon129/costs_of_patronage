@@ -10,6 +10,8 @@ Run `00_master.R` to reproduce everything from scratch (tables, figures, the fin
 - `02_figures.R` - produces plots, saves them in the figures folder
 - `replication_chmielowski.Rnw` compiles a final report, sources from the results and figures folder
 
+The final report is `replication_chmielowski.pdf`
+
 ## Requirements
 - R version 4.4.2
 - TinyTeX or a full LaTeX distribution
