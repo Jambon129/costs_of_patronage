@@ -1,0 +1,123 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nyt/global//global/global/global}
+  \entry{callaway2021}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=CB}{%
+         family={Callaway},
+         familyi={C\bibinitperiod},
+         given={Brantly},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=SPH}{%
+         family={Sant'Anna},
+         familyi={S\bibinitperiod},
+         given={Pedro\bibnamedelima H.C.},
+         giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+    }
+    \keyw{Difference-in-Differences, Dynamic treatment effects, Doubly robust, Event study, Variation in treatment timing, Treatment effect heterogeneity, Semi-parametric}
+    \strng{namehash}{CBSPH1}
+    \strng{fullhash}{CBSPH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2021}
+    \field{labeldatesource}{}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.jeconom.2020.12.001
+    \endverb
+    \field{issn}{0304-4076}
+    \field{note}{Themed Issue: Treatment Effect 1}
+    \field{number}{2}
+    \field{pages}{200\bibrangedash 230}
+    \field{title}{Difference-in-Differences with multiple time periods}
+    \verb{url}
+    \verb https://www.sciencedirect.com/science/article/pii/S0304407620303948
+    \endverb
+    \field{volume}{225}
+    \field{journaltitle}{Journal of Econometrics}
+    \field{year}{2021}
+  \endentry
+
+  \entry{sun2021}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=SL}{%
+         family={Sun},
+         familyi={S\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=AS}{%
+         family={Abraham},
+         familyi={A\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SLAS1}
+    \strng{fullhash}{SLAS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2021}
+    \field{labeldatesource}{}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.jeconom.2020.09.006
+    \endverb
+    \field{issn}{0304-4076}
+    \field{note}{Themed Issue: Treatment Effect 1}
+    \field{number}{2}
+    \field{pages}{175\bibrangedash 199}
+    \field{title}{Estimating dynamic treatment effects in event studies with heterogeneous treatment effects}
+    \verb{url}
+    \verb https://www.sciencedirect.com/science/article/pii/S030440762030378X
+    \endverb
+    \field{volume}{225}
+    \field{journaltitle}{Journal of Econometrics}
+    \field{year}{2021}
+  \endentry
+
+  \entry{guoxu2018}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=XG}{%
+         family={Xu},
+         familyi={X\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{XG1}
+    \strng{fullhash}{XG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2018}
+    \field{labeldatesource}{}
+    \field{sortinit}{X}
+    \field{sortinithash}{X}
+    \field{number}{108(11)}
+    \field{pages}{3170\bibrangedash 3198}
+    \field{title}{The Costs of Patronage: Evidence from the British Empire}
+    \field{journaltitle}{American Economic Review}
+    \field{year}{2018}
+  \endentry
+\enddatalist
+\endinput

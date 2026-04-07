@@ -483,7 +483,6 @@ med <- mediate(lmed2,
                treat = "connected",
                mediator = "initial_rev",
                data = patronage_full)
-beep(10) # calculation finished
 
 # function for extracting summary table
 extract_mediation_summary <- function (x) {

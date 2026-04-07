@@ -457,7 +457,6 @@ save(plot4, file = "./results/plot4.RData")
 #                 control_group = "nevertreated",
 #                 allow_unbalanced_panel = F,
 #                 panel = F)
-# beepr::beep(2)
 
 # 
 

@@ -57,8 +57,6 @@ citestyle=authoryear-ibid, backend=bibtex]{biblatex}
 options(width = 115)
 options(knitr.table.format = "latex")
 
-# set wd (change if necessary)
-setwd("C:/Users/xchmia/Documents/courses/1st_year/econometrics_3/replication/guo2018/R")
 
 # packages (install if necessary)
 library("kableExtra")

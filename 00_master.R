@@ -10,7 +10,6 @@
 
 # packages (loads needed packages if installed, installs and loads them if not)
 packages = c("tidyverse",    # data manipulation
-             "ggplot2",      # plotting
              "haven",        # handle stata data
              "lfe",          # handle FE models
              "plm",          # handle more FE models
@@ -18,8 +17,11 @@ packages = c("tidyverse",    # data manipulation
              "Hmisc",        # create leads an lags
              "did",          # Callaway and Sant'Anna's estimator
              "mediation",    # for the mediation analysis
-             "beepr",        # beep sound so I am notified when calculation is completed
-             "tools")        # for compiling
+             "tinytex"      # for compiling
+             #,"tools"
+             )  
+
+#tinytex::install_tinytex(bundle = "TinyTeX")
 
 ## Now load or install&load all
 package.check <- lapply(
